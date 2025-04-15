@@ -1,2 +1,2 @@
-# MaskMark
-Mask Image Watermarking (Official Implementation)
+# Mask Image Watermarking
+Official implementation of [Mask Image Watermarking](XXX).
