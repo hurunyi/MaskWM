@@ -1,0 +1,16 @@
+wm_enc_config:
+  image_size: 256
+  message_length: 32
+  in_channels: 3
+  tp_channels: 3
+  mask_channel: 1
+  channels: 64
+  norm_type: group
+wm_dec_config:
+  image_size: 256
+  message_length: 32
+  in_channels: 3
+  tp_channels: 3
+  mask_channel: 1
+  channels: 128
+  norm_type: group
