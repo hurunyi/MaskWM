@@ -12,12 +12,21 @@ After downloading, place the weights into the `checkpoints/` directory.
 
 ## 🚀 Inference
 
-To run inference, use the following command:
+To run inference for MaskMark-D, use the following command:
 
 ```bash
 python3 inference.py \
     --device "cuda:0" \
     --model_name "D_32bits" \
+    --image_name "00"
+```
+
+To run inference for MaskMark-ED, use the following command:
+
+```bash
+python3 inference.py \
+    --device "cuda:0" \
+    --model_name "ED_32bits" \
     --image_name "00"
 ```
 
