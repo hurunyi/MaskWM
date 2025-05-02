@@ -6,7 +6,7 @@ Official implementation of [Mask Image Watermarking](http://arxiv.org/abs/2504.1
 
 We provide pre-trained model weights for inference. You can download them from the following link:
 
-**[Download Model Weights]([https://example.com/download-link](https://huggingface.co/Runyi-Hu/MaskMark))**
+**[Download Model Weights](https://huggingface.co/Runyi-Hu/MaskMark)**
 
 After downloading, place the weights into the `checkpoints/` directory.
 
