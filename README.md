@@ -16,9 +16,9 @@ To run inference, use the following command:
 
 ```bash
 python3 inference.py \
---device "cuda:0" \
---model_name "D_32bits" \
---image_name "00"
+    --device "cuda:0" \
+    --model_name "D_32bits" \
+    --image_name "00"
 ```
 
 The generated results will be saved to the `results/` directory.
