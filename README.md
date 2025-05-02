@@ -8,8 +8,8 @@ We provide pre-trained model weights for inference. You can download them from t
 
 Specifically, the following two variants are available:
 
-- **[D_32bits]([https://huggingface.co/Runyi-Hu/MaskMark/tree/main/D_32bits](https://huggingface.co/Runyi-Hu/MaskMark/resolve/main/D_32bits.pth?download=true))** – for global watermark embedding.
-- **[ED_32bits]([https://huggingface.co/Runyi-Hu/MaskMark/tree/main/ED_32bits](https://huggingface.co/Runyi-Hu/MaskMark/resolve/main/ED_32bits.pth?download=true))** – for adaptive local watermark embedding based on the mask.
+- **[D_32bits](https://huggingface.co/Runyi-Hu/MaskMark/resolve/main/D_32bits.pth?download=true)** – for global watermark embedding.
+- **[ED_32bits](https://huggingface.co/Runyi-Hu/MaskMark/resolve/main/ED_32bits.pth?download=true)** – for adaptive local watermark embedding based on the mask.
 
 After downloading, place the weights into the `checkpoints/` directory.
 
