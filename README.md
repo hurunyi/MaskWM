@@ -10,7 +10,7 @@ After downloading, place the weights into the `checkpoints/` directory.
 
 ## 🚀 Inference
 
-To run inference for MaskMark-D, use the following command:
+### MaskMark-D
 
 ```bash
 python3 inference.py \
@@ -19,7 +19,17 @@ python3 inference.py \
     --image_name "00"
 ```
 
-To run inference for MaskMark-ED, use the following command:
+This command performs the following steps:
+
+1. **Global Watermark Embedding.** A full-image watermark is embedded into the specified image.
+
+2. **Masked Fusion.** Using a predefined mask, only the masked region retains the watermark, while the rest of the image is replaced by the original image. This creates a fused image that contains both watermarked and clean areas.
+
+3. **Watermark Localization & Extraction.** The model then performs watermark localization and extraction on the fused image.
+
+All results will be saved in the `results/D_32bits` directory.
+
+### MaskMark-ED
 
 ```bash
 python3 inference.py \
@@ -27,8 +37,9 @@ python3 inference.py \
     --model_name "ED_32bits" \
     --image_name "00"
 ```
+Unlike **MaskMark-D**, this command enables adaptive **local** watermark embedding during generation. The watermark is primarily embedded within the mask-selected region, while the rest of the image is designed to contain minimal or no watermark signal.
 
-The generated results will be saved to the `results/` directory.
+All results will be saved in the `results/ED_32bits` directory.
 
 ## 🛠️ Training
 Training code will be released in a future update. Stay tuned!
