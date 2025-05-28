@@ -205,7 +205,4 @@ if __name__ == "__main__":
     parser.add_argument('--train_config_path', type=str)
     parser.add_argument('--model_config_path', type=str)
     args = parser.parse_args()
-    args.model_name = "D_32bits"
-    args.train_config_path = f"configs/train/train.yaml"
-    args.model_config_path = f"configs/model/{args.model_name}.yaml"
     main(args)
