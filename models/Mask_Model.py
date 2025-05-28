@@ -741,7 +741,7 @@ class Encoder(nn.Module):
         self.final_layer = nn.Conv2d(channels + in_channels, in_channels, kernel_size=1)
         self.jnd = JND(preprocess=denormalize, postprocess=normalize)
         
-    def forward(self, image, message, mask=None, tp=None, jnd_factor=1.0, blue=False):
+    def forward(self, image, message, mask=None, use_jnd=True, tp=None, jnd_factor=1.0, blue=False):
         bsz, _, H, W = image.shape
 
         if tp is None:
@@ -762,7 +762,8 @@ class Encoder(nn.Module):
         wm_image = self.unet(concat)
         concat_final = torch.cat([wm_image, image], dim=1)
         wm_image = self.final_layer(concat_final)
-        wm_image = self.jnd(image, wm_image, jnd_factor, blue)
+        if use_jnd:
+            wm_image = self.jnd(image, wm_image, jnd_factor, blue)
 
         return wm_image
 
@@ -852,24 +853,22 @@ class WatermarkModel(nn.Module):
         self,
         image,
         message,
-        mask_enc=None,
-        mask_wm=None,
-        mask_ext=None,
-        mask_gt=None,
+        mask=None,
+        use_jnd=True,
         vae=None,
     ):
-        encoded_image = self.encoder(image, message, mask_enc)
+        encoded_image = self.encoder(image, message, mask, use_jnd)
         
-        if mask_wm is not None:
-            noised_image = encoded_image * mask_wm + image * (1 - mask_wm)
+        if mask is not None:
+            noised_image = encoded_image * mask + image * (1 - mask)
         else:
             noised_image = encoded_image
         
         if vae is not None:
-            noised_image, mask_gt = vae((noised_image, image), mask_gt)
+            noised_image, mask_gt = vae(noised_image, mask)
         else:
-            noised_image, mask_gt = self.noise((noised_image, image), mask_gt)
+            noised_image, mask_gt = self.noise(noised_image, mask)
         
-        decoded_message, mask_pd = self.decoder(noised_image, mask_ext)
+        decoded_message, mask_pd = self.decoder(noised_image, mask)
         
         return encoded_image, noised_image, decoded_message, mask_gt, mask_pd

@@ -1,0 +1,23 @@
+device: cuda:0
+num_training_steps: 100000
+num_save_steps: 10000
+dataset_path: /data2/zhangjie/runyi/coco_data
+batch_size: 16
+lr: 0.0001
+encoder_weight: 1
+decoder_weight: 20
+decoder_weight_end: 0.2
+num_decoder_weight_decay_ratio: 0.05
+mask_weight: 0.5
+ED_path: ''
+use_scheduler: cosine
+vae_aug: false
+start_jnd_ratio: 0.05
+noise_layers: Combined([Identity(),JpegMask(50),JpegTest(50),GF(1,5),GN(0,0.1),MF(5),SP(0.1),Rotate(-90,90),Perspective(0.1,0.5),HorizontalFlip()])
+masks:
+  kind: mixed
+  invert_proba: 0.5
+  irregular_proba: 0.25
+  box_proba: 0.25
+  full_proba: 0.25
+  segm_proba: 0.25

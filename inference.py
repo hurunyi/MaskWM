@@ -46,11 +46,11 @@ def main(args):
     device = args.device
     if "ED_" in args.model_name:
         jnd_factor = 1.75
-        model_config = OmegaConf.load("configs/model/ED_32bits.yaml")
+        model_config = OmegaConf.load(f"configs/model/{args.model_name}.yaml")
         embedding_mask = 1
     else:
         jnd_factor = 1.3
-        model_config = OmegaConf.load("configs/model/D_32bits.yaml")
+        model_config = OmegaConf.load(f"configs/model/{args.model_name}.yaml")
         embedding_mask = 0
     
     image_size = 512
@@ -88,9 +88,9 @@ def main(args):
     mask_256 = F.interpolate(mask, size=[256, 256], mode="bilinear")
 
     if embedding_mask:
-        wm_image_256 = wm_model.encoder(image_256, message, mask_256[:,:1], jnd_factor=jnd_factor, blue=True)
+        wm_image_256 = wm_model.encoder(image_256, message, mask_256[:,:1], use_jnd=True, jnd_factor=jnd_factor, blue=True)
     else:
-        wm_image_256 = wm_model.encoder(image_256, message, jnd_factor=jnd_factor, blue=True)
+        wm_image_256 = wm_model.encoder(image_256, message, use_jnd=True, jnd_factor=jnd_factor, blue=True)
     wm_image = (F.interpolate((wm_image_256-image_256), size=[H, W], mode="bilinear") + image).clamp_(-1, 1)
     
     psnr_value = psnr(denormalize(wm_image), denormalize(image), 1).item()
