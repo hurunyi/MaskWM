@@ -74,7 +74,7 @@ All results will be saved in the `results/ED_32bits` directory.
         --train_config_path "configs/train/train.yaml" \
         --model_config_path "configs/model/D_32bits.yaml"
     ```
-Logs and checkpoints are saved in the `checkpoints/<model_name>/` directory
+    Logs and checkpoints are saved in the `checkpoints/<model_name>` directory.
 
 ## Cite
 If you find this repository useful, please consider giving a star ⭐ and please cite as:
