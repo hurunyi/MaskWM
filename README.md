@@ -13,7 +13,7 @@ Specifically, the following two variants are available:
 
 After downloading, place the weights into the `checkpoints/` directory.
 
-## 🚀 Inference
+## 🔍 Inference
 
 ### MaskMark-D
 
@@ -47,7 +47,34 @@ Unlike **MaskMark-D**, this command enables adaptive **local** watermark embeddi
 All results will be saved in the `results/ED_32bits` directory.
 
 ## 🛠️ Training
-Training code will be released in a future update. Stay tuned!
+
+### 📦 Data Download
+
+1. Download the [coco 2014 data](https://cocodataset.org/#download).
+2. Expected directory structure:
+    ```
+    data/
+    └── coco_data/
+        ├── annotations/
+        ├── train2014/
+        └── val2014/
+    ```
+
+### 🚀 Training Scripts
+
+1. **Set dataset path**: Modify the `dataset_path` field in `configs/train/train.yaml` to point to your local dataset directory. For example:
+   ```yaml
+   dataset_path: data/coco_data
+   ```
+2. **Select model variant**: You can train different models by changing the model_name in the config file. Supported options: D_32bits, D_64bits, D_128bits, ED_32bits, ED_64bits, ED_128bits.
+3. **Start training with the following command (D_32bits)**:
+    ```bash
+    python3 train.py \
+        --model_name "D_32bits" \
+        --train_config_path "configs/train/train.yaml" \
+        --model_config_path "configs/model/D_32bits.yaml"
+    ```
+Logs and checkpoints are saved in the `checkpoints/<model_name>/` directory
 
 ## Cite
 If you find this repository useful, please consider giving a star ⭐ and please cite as:
