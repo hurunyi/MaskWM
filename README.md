@@ -61,7 +61,7 @@ All results will be saved in the `results/ED_32bits` directory.
     ```
 
 ### 🚀 Training Scripts
-Before starting training, please note the following:
+
 1. **Set dataset path**: Modify the `dataset_path` field in `configs/train/train.yaml` to point to your local dataset directory. For example:
    ```yaml
    dataset_path: data/coco_data
