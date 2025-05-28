@@ -67,7 +67,7 @@ All results will be saved in the `results/ED_32bits` directory.
    dataset_path: data/coco_data
    ```
 2. **Select model variant**: You can train different models by changing the model_name in the config file. Supported options: D_32bits, D_64bits, D_128bits, ED_32bits, ED_64bits, ED_128bits.
-3. **Start training with the following command**:
+3. **Start training with the following command (D_32bits)**:
     ```bash
     python3 train.py \
         --model_name "D_32bits" \
