@@ -1,5 +1,5 @@
 from torch import nn
-from .noise_layers import Identity
+from .noise_layers import *
 
 
 class Noise(nn.Module):
