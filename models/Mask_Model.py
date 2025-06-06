@@ -756,7 +756,9 @@ class Encoder(nn.Module):
             if mask is None:
                 mask = torch.ones((bsz, 1, H, W)).to(image.device)
             else:
-                mask = mask.unsqueeze(0).repeat(bsz, 1, 1, 1)
+                if mask.dim() != 4:
+        	    mask = mask.unsqueeze(0)
+                mask = mask.repeat(bsz, 1, 1, 1)
             concat = torch.cat([image, tp, mask], dim=1)
         else:
             concat = torch.cat([image, tp], dim=1)

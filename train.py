@@ -184,7 +184,7 @@ def main(args):
             if num % num_save_steps == 0:
                 ''' save model '''
                 path_model = f"{result_folder}/models"
-                path_encoder_decoder = f"{path_model}/ED_{num}.pth"
+                path_encoder_decoder = f"{path_model}/ckpt_{num}.pth"
                 network.save_model(path_encoder_decoder)
 
             if num >= num_training_steps:
@@ -194,7 +194,7 @@ def main(args):
         if finish_flag:
             ''' save model '''
             path_model = f"{result_folder}/models"
-            path_encoder_decoder = f"{path_model}/ED_{num}.pth"
+            path_encoder_decoder = f"{path_model}/ckpt_{num}.pth"
             network.save_model(path_encoder_decoder)
             break
 
