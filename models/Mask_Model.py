@@ -874,6 +874,6 @@ class WatermarkModel(nn.Module):
         else:
             noised_image, mask_gt = self.noise(noised_image, mask)
         
-        decoded_message, mask_pd = self.decoder(noised_image, mask)
+        decoded_message, mask_pd = self.decoder(noised_image, mask_gt)
         
         return encoded_image, noised_image, decoded_message, mask_gt, mask_pd
