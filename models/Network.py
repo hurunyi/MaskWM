@@ -4,7 +4,6 @@ import torch
 import torch.nn as nn
 from diffusers.optimization import get_scheduler
 from .Mask_Model import WatermarkModel
-from .noise_layers import VAE
 
 
 def denormalize(images):
@@ -18,7 +17,7 @@ class MaskMark:
 
     def __init__(
         self, device, lr, num_training_steps=100000, encoder_weight=1, decoder_weight=10,
-        model_config=None, mask_weight=0, use_scheduler="", vae_aug=False, **kwargs,
+        model_config=None, mask_weight=0, use_scheduler="", **kwargs,
     ):
         # device
         self.device = device
@@ -55,25 +54,20 @@ class MaskMark:
         self.decoder_weight = decoder_weight
         self.mask_weight = mask_weight
 
-        if vae_aug:
-            self.vae_distortion = VAE().to(device)
-
     def train(
         self,
         images: torch.Tensor,
         messages: torch.Tensor,
         mask: torch.Tensor,
         use_jnd: bool = True,
-        run_vae: bool = False,
     ):
         self.encoder_decoder.train()
 
         with torch.enable_grad():
             images, messages, mask = images.to(self.device), messages.to(self.device), mask.to(self.device)
 
-            vae_model = self.vae_distortion if run_vae else None
             encoded_images, _, decoded_messages, mask_pd, mask_gt = \
-                self.encoder_decoder(image=images, message=messages, mask=mask, use_jnd=use_jnd, vae=vae_model)
+                self.encoder_decoder(image=images, message=messages, mask=mask, use_jnd=use_jnd)
 
             '''
             train encoder and decoder

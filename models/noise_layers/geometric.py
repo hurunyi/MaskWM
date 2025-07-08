@@ -121,86 +121,6 @@ class UpperLeftCrop(nn.Module):
         return image, mask
 
 
-class CropResizePad(nn.Module):
-    def __init__(self, resize_min=None, resize_max=None, crop_min=None, crop_max=None):
-        super(CropResizePad, self).__init__()
-        self.resize_min = resize_min
-        self.resize_max = resize_max
-        self.crop_min = crop_min
-        self.crop_max = crop_max
-
-    def get_random_resize_size(self, h, w):
-        if self.resize_min is None or self.resize_max is None:
-            raise ValueError("resize_min and resize_max must be provided")
-        output_size = (
-            torch.randint(int(self.resize_min * h), int(self.resize_max * h) + 1, size=(1,)).item(),
-            torch.randint(int(self.resize_min * w), int(self.resize_max * w) + 1, size=(1,)).item()
-        )
-        return output_size
-
-    def get_random_crop_size(self, h, w):
-        if self.crop_min is None or self.crop_max is None:
-            raise ValueError("crop_min and crop_max must be provided")
-        output_size = (
-            torch.randint(int(self.crop_min * h), min(int(self.crop_max * h) + 1, h), size=(1,)).item(),
-            torch.randint(int(self.crop_min * w), min(int(self.crop_max * w) + 1, w), size=(1,)).item()
-        )
-        return output_size
-
-    def forward(self, images, masks, sizes=None, seed=None):
-        if seed is not None:
-            torch.manual_seed(seed)
-            random.seed(seed)
-        batch_size, channels, original_h, original_w = images.shape
-
-        # Resize with random proportions
-        if sizes is None:
-            new_size = self.get_random_resize_size(original_h, original_w)
-            crop_size = self.get_random_crop_size(*new_size)
-        else:
-            new_size = int(sizes[0] * original_h), int(sizes[1] * original_w)
-            crop_size_0, crop_size_1 = sizes[2], sizes[3]
-            crop_size = int(crop_size_0 * new_size[0]), int(crop_size_1 * new_size[1])
-
-        images = F.resize(images, new_size, antialias=False)
-        masks = F.resize(masks, new_size, interpolation=InterpolationMode.NEAREST)
-        crop_h, crop_w = crop_size
-
-        # Ensure the crop size is valid for the resized images
-        crop_h = min(crop_h, new_size[0])
-        crop_w = min(crop_w, new_size[1])
-
-        i, j, h, w = transforms.RandomCrop.get_params(images[0], output_size=(crop_h, crop_w))
-        cropped_images = images[:, :, i:i + h, j:j + w]
-        cropped_masks = masks[:, :, i:i + h, j:j + w]
-
-        # Ensure the crop size is valid for padding
-        if h > original_h or w > original_w:
-            raise ValueError("Crop size is larger than the original image size.")
-
-        # Randomly place the crop and add padding
-        pad_top = random.randint(0, max(0, original_h - h))
-        pad_left = random.randint(0, max(0, original_w - w))
-        pad_bottom = original_h - h - pad_top
-        pad_right = original_w - w - pad_left
-
-        # Generate a random color for each channel within the normalized range
-        min_val, max_val = images.min().item(), images.max().item()
-        pad_color = (max_val - min_val) * torch.rand((batch_size, channels, 1, 1), dtype=images.dtype,
-                                                     device=images.device) + min_val
-
-        # Create a padded image with the random color
-        padded_images = pad_color.repeat(1, 1, original_h, original_w)
-        padded_masks = torch.zeros((batch_size, masks.shape[1], original_h, original_w), dtype=masks.dtype,
-                                   device=masks.device)
-
-        # Place the cropped images and masks into the padded versions
-        padded_images[:, :, pad_top:pad_top + h, pad_left:pad_left + w] = cropped_images
-        padded_masks[:, :, pad_top:pad_top + h, pad_left:pad_left + w] = cropped_masks
-
-        return padded_images, padded_masks
-
-
 class Perspective(nn.Module):
     def __init__(self, min_distortion_scale=0.1, max_distortion_scale=0.5, random_seed=None):
         super(Perspective, self).__init__()
@@ -262,4 +182,34 @@ class HorizontalFlip(nn.Module):
     def forward(self, image, mask, *args, **kwargs):
         image = F.hflip(image)
         mask = F.hflip(mask)
+        return image, mask
+
+
+class CropResize(nn.Module):
+    def __init__(self, min_ratio=0.5, max_ratio=1):
+        super(CropResize, self).__init__()
+        self.min_ratio = min_ratio
+        self.max_ratio = max_ratio
+
+    def get_random_ratio(self):
+        if self.min_ratio is None or self.max_ratio is None:
+            raise ValueError("min_ratio and max_ratio must be provided")
+        h_ratio = torch.empty(1).uniform_(self.min_ratio, self.max_ratio).item()
+        w_ratio = torch.empty(1).uniform_(self.min_ratio, self.max_ratio).item()
+        return h_ratio, w_ratio
+
+    def forward(self, image, mask):
+        _, _, h, w = image.shape
+        h_ratio, w_ratio = self.get_random_ratio()
+        crop_h, crop_w = int(h * h_ratio), int(w * w_ratio)
+
+        top = torch.randint(0, h - crop_h + 1, (1,)).item()
+        left = torch.randint(0, w - crop_w + 1, (1,)).item()
+
+        image = F.crop(image, top, left, crop_h, crop_w)
+        mask = F.crop(mask, top, left, crop_h, crop_w)
+
+        image = F.resize(image, (h, w))
+        mask = F.resize(mask, (h, w), interpolation=InterpolationMode.NEAREST)
+
         return image, mask

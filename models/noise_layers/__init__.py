@@ -20,7 +20,8 @@ from .valuemetric import (
 from .geometric import (
     Rotate,
     Perspective,
-    HorizontalFlip
+    HorizontalFlip,
+    CropResize
 )
 from .vae import VAE
 from .combined import Combined

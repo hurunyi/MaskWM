@@ -35,6 +35,8 @@ def main(args):
 
     image_size, message_length = model_config["wm_enc_config"]["image_size"], model_config["wm_enc_config"]["message_length"]
     noise_layers = train_config["noise_layers"]
+    ft_noise_layers = train_config["ft_noise_layers"]
+    full_mask_ft = train_config["full_mask_ft"]
     train_config["noise_layers"] = "Identity()"
     batch_size, device, num_training_steps, num_save_steps = \
         train_config["batch_size"], train_config["device"], train_config["num_training_steps"], train_config["num_save_steps"]
@@ -134,17 +136,27 @@ def main(args):
             else:
                 mask = mask_embedder(images, masks=masks)
 
-            if train_config["vae_aug"] and random.random() < 0.5:
-                run_vae = True
-            else:
-                run_vae = False
+            if is_ft:
+                if random.random() < 0.5:
+                    used_noise_layers = ft_noise_layers
+                    if full_mask_ft:
+                        mask = full_mask_embedder(images)
+                        mask = torch.from_numpy(mask)
+                else:
+                    used_noise_layers = noise_layers
 
-            result = network.train(images=images, messages=message, mask=mask, use_jnd=use_jnd, run_vae=run_vae)
+                network.encoder_decoder.noise = Noise(used_noise_layers)
+                if hasattr(network.encoder_decoder.noise.noise, "list"):
+                    for model in network.encoder_decoder.noise.noise.list:
+                            model.to(device)
+                else:
+                    network.encoder_decoder.noise.noise.to(device)
+
+            result = network.train(images=images, messages=message, mask=mask, use_jnd=use_jnd)
 
             result["mask_percentage"] = mask.mean().item()
             result["decoder_weight"] = network.decoder_weight
             result["step"] = num
-            result["run_vae"] = run_vae
 
             if num % 10 == 0:
                 print(f"\n{result}\n")

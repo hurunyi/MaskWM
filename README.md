@@ -76,6 +76,21 @@ All results will be saved in the `results/ED_32bits` directory.
     ```
     Logs and checkpoints are saved in the `checkpoints/<model_name>` directory.
 
+### 🎯 Finetuning Scripts
+
+In practical scenarios, you might want to enhance the model's robustness against specific distortions based on your application needs. We provide dedicated finetuning scripts to support this.
+Specifically, in Step 3 above, you can simply replace `train.yaml` with `finetune_<distortion_name>.yaml` to perform robustness-oriented finetuning.
+We provide two example config files for finetuning: `finetune_vae.yaml` and `finetune_crop&resize.yaml`.
+Key parameters to be aware of:
+
+- **num_training_steps**: We recommend setting this between 20,000 and 50,000, depending on the scale and difficulty of your task.
+- **ED_path**: Path to the pretrained model you want to finetune.
+- **ft_noise_layers**: A list of distortion types you want the model to become robust against.
+- **full_mask_ft**: Whether to use a global mask during finetuning. For example, for Crop & Resize, we enable this option since the distortion typically preserves only part of the watermarked image — similar to the behavior of a local mask.
+
+This flexible finetuning setup allows for targeted robustness improvements tailored to your deployment environment.
+
+
 ## Cite
 If you find this repository useful, please consider giving a star ⭐ and please cite as:
 ```
