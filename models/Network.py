@@ -66,7 +66,7 @@ class MaskMark:
         with torch.enable_grad():
             images, messages, mask = images.to(self.device), messages.to(self.device), mask.to(self.device)
 
-            encoded_images, _, decoded_messages, mask_pd, mask_gt = \
+            encoded_images, _, decoded_messages, mask_gt, mask_pd = \
                 self.encoder_decoder(image=images, message=messages, mask=mask, use_jnd=use_jnd)
 
             '''
