@@ -28,7 +28,7 @@ class VAE(nn.Module):
         # vae_type = random.choice(["vae"])
         if vae_type == "vae":
             latents = self.vae.encode(image.half()).latent_dist.mode()
-            noised_image = self.vae.decode(latents / self.vae.config.scaling_factor, return_dict=False)[0].float()
+            noised_image = self.vae.decode(latents, return_dict=False)[0].float()
         elif vae_type == "bmshj2018":
             out_net = self.bmshj2018(torch.clamp((image + 1) / 2, 0, 1))
             out_net['x_hat'].clamp_(0, 1)
