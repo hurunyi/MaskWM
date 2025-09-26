@@ -4,18 +4,18 @@ Official implementation of [Mask Image Watermarking](http://arxiv.org/abs/2504.1
 
 ## 🔗 Model Weights
 
-We provide pre-trained model weights for inference. You can download them from the following link: **[Download Model Weights](https://huggingface.co/Runyi-Hu/MaskMark)**.
+We provide pre-trained model weights for inference. You can download them from the following link: **[Download Model Weights](https://huggingface.co/Runyi-Hu/MaskWM)**.
 
 Specifically, the following two variants are available:
 
-- **[D_32bits](https://huggingface.co/Runyi-Hu/MaskMark/resolve/main/D_32bits.pth?download=true), [D_64bits](https://huggingface.co/Runyi-Hu/MaskMark/resolve/main/D_64bits.pth?download=true), [D_128bits](https://huggingface.co/Runyi-Hu/MaskMark/resolve/main/D_128bits.pth?download=true)** – for global watermark embedding with different bits.
-- **[ED_32bits](https://huggingface.co/Runyi-Hu/MaskMark/resolve/main/ED_32bits.pth?download=true), [ED_64bits](https://huggingface.co/Runyi-Hu/MaskMark/resolve/main/ED_64bits.pth?download=true), [ED_128bits](https://huggingface.co/Runyi-Hu/MaskMark/resolve/main/ED_128bits.pth?download=true)** – for adaptive local watermark embedding based on the mask with different bits.
+- **[D_32bits](https://huggingface.co/Runyi-Hu/MaskWM/resolve/main/D_32bits.pth?download=true), [D_64bits](https://huggingface.co/Runyi-Hu/MaskWM/resolve/main/D_64bits.pth?download=true), [D_128bits](https://huggingface.co/Runyi-Hu/MaskWM/resolve/main/D_128bits.pth?download=true)** – for global watermark embedding with different bits.
+- **[ED_32bits](https://huggingface.co/Runyi-Hu/MaskWM/resolve/main/ED_32bits.pth?download=true), [ED_64bits](https://huggingface.co/Runyi-Hu/MaskWM/resolve/main/ED_64bits.pth?download=true), [ED_128bits](https://huggingface.co/Runyi-Hu/MaskWM/resolve/main/ED_128bits.pth?download=true)** – for adaptive local watermark embedding based on the mask with different bits.
 
 After downloading, place the weights into the `checkpoints/` directory.
 
 ## 🔍 Inference
 
-### MaskMark-D
+### MaskWM-D
 
 ```bash
 python3 inference.py \
@@ -34,7 +34,7 @@ This command performs the following steps:
 
 All results will be saved in the `results/D_32bits` directory.
 
-### MaskMark-ED
+### MaskWM-ED
 
 ```bash
 python3 inference.py \
@@ -42,7 +42,7 @@ python3 inference.py \
     --model_name "ED_32bits" \
     --image_name "00"
 ```
-Unlike **MaskMark-D**, this command enables adaptive **local** watermark embedding during generation. The watermark is primarily embedded within the mask-selected region, while the rest of the image is designed to contain minimal or no watermark signal.
+Unlike **MaskWM-D**, this command enables adaptive **local** watermark embedding during generation. The watermark is primarily embedded within the mask-selected region, while the rest of the image is designed to contain minimal or no watermark signal.
 
 All results will be saved in the `results/ED_32bits` directory.
 
