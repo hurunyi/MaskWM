@@ -11,6 +11,8 @@ Specifically, the following two variants are available:
 - **[D_32bits](https://huggingface.co/Runyi-Hu/MaskWM/resolve/main/D_32bits.pth?download=true), [D_64bits](https://huggingface.co/Runyi-Hu/MaskWM/resolve/main/D_64bits.pth?download=true), [D_128bits](https://huggingface.co/Runyi-Hu/MaskWM/resolve/main/D_128bits.pth?download=true)** – for global watermark embedding with different bits.
 - **[ED_32bits](https://huggingface.co/Runyi-Hu/MaskWM/resolve/main/ED_32bits.pth?download=true), [ED_64bits](https://huggingface.co/Runyi-Hu/MaskWM/resolve/main/ED_64bits.pth?download=true), [ED_128bits](https://huggingface.co/Runyi-Hu/MaskWM/resolve/main/ED_128bits.pth?download=true)** – for adaptive local watermark embedding based on the mask with different bits.
 
+We also provide enhanced fine-tuned variants in https://huggingface.co/Runyi-Hu/MaskWM/tree/main that are specially optimized for robustness under different types of distortions (e.g., VAE, Move and Resize, Crop and Resize). These models are designed to improve watermark extraction performance in more challenging or degraded visual conditions.
+
 After downloading, place the weights into the `checkpoints/` directory.
 
 ## 🔍 Inference
