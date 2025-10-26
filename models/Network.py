@@ -13,7 +13,7 @@ def denormalize(images):
     return (images / 2 + 0.5).clamp(0, 1)
 
 
-class MaskMark:
+class MaskWM:
 
     def __init__(
         self, device, lr, num_training_steps=100000, encoder_weight=1, decoder_weight=10,

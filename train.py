@@ -7,7 +7,7 @@ import numpy as np
 from tqdm import tqdm
 from accelerate.utils import set_seed
 from omegaconf import OmegaConf
-from models.Network import MaskMark
+from models.Network import MaskWM
 from models.Noise import Noise
 from utils.loader import get_dataloader_segmentation
 from utils.masks import get_mask_embedder
@@ -63,7 +63,7 @@ def main(args):
         max_nb_masks=3
     )
 
-    network = MaskMark(**train_config, model_config=model_config)
+    network = MaskWM(**train_config, model_config=model_config)
     mask_embedder = get_mask_embedder(**train_config["masks"])
     full_mask_embedder = get_mask_embedder(kind="full", invert_proba=1.0)
 
