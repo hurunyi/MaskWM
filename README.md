@@ -96,10 +96,10 @@ This flexible finetuning setup allows for targeted robustness improvements tailo
 ## Cite
 If you find this repository useful, please consider giving a star ⭐ and please cite as:
 ```
-@article{hu2025mask,
+@inproceedings{hu2025mask,
   title={Mask Image Watermarking},
-  author={Hu, Runyi and Zhang, Jie and Zhao, Shiqian and Lukas, Nils and Li, Jiwei and Guo, Qing and Qiu, Han and Zhang, Tianwei},
-  journal={arXiv preprint arXiv:2504.12739},
+  author={Runyi Hu and Jie Zhang and Shiqian Zhao and Nils Lukas and Jiwei Li and Qing Guo and Han Qiu and Tianwei Zhang},
+  booktitle={The Thirty-ninth Annual Conference on Neural Information Processing Systems},
   year={2025}
 }
 ```
